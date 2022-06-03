@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex10;
 
 import java.awt.Container;
 import java.awt.event.KeyAdapter;
@@ -87,6 +87,11 @@ public class BubblerFrame extends JFrame {
 					case KeyEvent.VK_RIGHT: 	
 						player.setRight(false);
 						break; 
+						
+					case KeyEvent.VK_SPACE:
+						Bubble bubble = new Bubble(player);
+						add(bubble);
+						break;
 				}
 			}
 			

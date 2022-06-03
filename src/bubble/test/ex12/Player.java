@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex12;
 
 import javax.swing.ImageIcon;
 
@@ -23,13 +23,16 @@ public class Player extends JLabel implements Moveable {
 	private boolean up;
 	private boolean down;
 	
+	// 플레이어의 방향
+	private PlayerDirection playerDirection;
+	
 	// 벽에 충돌한 상태
 	private boolean leftWallCrash;
 	private boolean rightWallCrash;
 	
 	// 플레이어 속도 상태
-	private final int SPEED = 4;
-	private final int JUMPSPEED = 2;
+	private final int SPEED = 5;
+	private final int JUMPSPEED = 3;
 
 	private ImageIcon playerR, playerL;
 
@@ -54,6 +57,8 @@ public class Player extends JLabel implements Moveable {
 		down = false;
 		leftWallCrash = false;
 		rightWallCrash = false;
+		
+		playerDirection = PlayerDirection.RIGHT;
 
 		setIcon(playerR);
 		setSize(50, 50);
@@ -68,7 +73,7 @@ public class Player extends JLabel implements Moveable {
 	// 이벤트 핸들러
 	@Override
 	public void left() {
-		System.out.println("left");
+		playerDirection = PlayerDirection.LEFT;
 		left = true;
 		
 		// 2가지 일을 동시에 하려고 하면 무조건 쓰레드를 사용해야한다.
@@ -89,8 +94,8 @@ public class Player extends JLabel implements Moveable {
 
 	@Override
 	public void right() {
+		playerDirection = PlayerDirection.RIGHT;
 		right = true;
-		System.out.println("right");
 		
 		// 2가지 일을 동시에 하려고 하면 무조건 쓰레드를 사용해야한다.
 		new Thread(() -> {

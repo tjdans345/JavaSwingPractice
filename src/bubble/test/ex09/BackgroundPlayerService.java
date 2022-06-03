@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex09;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -38,8 +38,11 @@ public class BackgroundPlayerService implements Runnable{ // 하나의 새로운
 			if(bottomColor != -2) {
 				System.out.println("바닥에 충돌함");
 				player.setDown(false);
+			} else { // -2 일때 실행됨 => 내 바닥색깔이 하얀색이라는 것 즉 공중에 떠있다는 말
+				if(!player.isUp() && !player.isDown()) {
+					player.down();
+				}
 			}
-			
 			
 			// 외벽 충돌 확인
 			if(leftColor.getRed() == 255 && leftColor.getGreen() == 0 && leftColor.getBlue() ==0) {

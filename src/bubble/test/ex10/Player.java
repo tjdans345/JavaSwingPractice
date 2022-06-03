@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex10;
 
 import javax.swing.ImageIcon;
 
@@ -28,8 +28,8 @@ public class Player extends JLabel implements Moveable {
 	private boolean rightWallCrash;
 	
 	// 플레이어 속도 상태
-	private final int SPEED = 4;
-	private final int JUMPSPEED = 2;
+	private final int SPEED = 5;
+	private final int JUMPSPEED = 3;
 
 	private ImageIcon playerR, playerL;
 
@@ -113,6 +113,7 @@ public class Player extends JLabel implements Moveable {
 	// 즉 2가지 일을 동시에 하려고 하면 무조건 쓰레드를 사용해야한다.
 	@Override
 	public void up() {
+		System.out.println("up");
 		up = true;
 		new Thread(() -> {
 			// 끝이 있는 반복이기 때문에 for문을 돌린다.
@@ -134,6 +135,8 @@ public class Player extends JLabel implements Moveable {
 
 	@Override
 	public void down() {
+
+		System.out.println("down");
 		down = true;
 		new Thread(() -> {
 			while(down) {

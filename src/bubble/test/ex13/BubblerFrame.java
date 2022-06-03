@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex13;
 
 import java.awt.Container;
 import java.awt.event.KeyAdapter;
@@ -47,49 +47,54 @@ public class BubblerFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x버튼으로 창을 끌 때 JVM 같이 종료하기
 	}
-	
+
 	private void initListner() {
 		// adapter 패턴
 		addKeyListener(new KeyAdapter() {
-			
+
 			// 키보드 클릭 이벤트 핸들러
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_LEFT: 
-						if(!player.isLeft() && !player.isLeftWallCrash()) {
-							player.left();
-						}
-						
-						break;
-					case  KeyEvent.VK_RIGHT: 
-						if(!player.isRight() && !player.isRightWallCrash()) {
-							player.right();
-						}
-						break;
-					case  KeyEvent.VK_UP: 
-						if(!player.isUp() && !player.isDown()) {
-							player.up();
-						}
-						break;
+
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_LEFT:
+					if (!player.isLeft() && !player.isLeftWallCrash()) {
+						player.left();
+					}
+
+					break;
+				case KeyEvent.VK_RIGHT:
+					if (!player.isRight() && !player.isRightWallCrash()) {
+						player.right();
+					}
+					break;
+				case KeyEvent.VK_UP:
+					if (!player.isUp() && !player.isDown()) {
+						player.up();
+					}
+					break;
 				}
 			}
-			
+
 			// 키보드 해제 이벤트 핸들러
 			@Override
 			public void keyReleased(KeyEvent e) {
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_LEFT: 
-						player.setLeft(false);
-						break;
-						
-					case KeyEvent.VK_RIGHT: 	
-						player.setRight(false);
-						break; 
+				case KeyEvent.VK_LEFT:
+					player.setLeft(false);
+					break;
+
+				case KeyEvent.VK_RIGHT:
+					player.setRight(false);
+					break;
+
+				case KeyEvent.VK_SPACE:
+					Bubble bubble = new Bubble(player);
+					add(bubble);
+					break;
 				}
 			}
-			
+
 		});
 	}
 
