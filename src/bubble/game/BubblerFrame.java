@@ -1,14 +1,14 @@
-package bubble.test.ex18;
+package bubble.game;
 
-import java.awt.Container;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import bubble.game.component.Enemy;
+import bubble.game.component.Player;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +42,7 @@ public class BubblerFrame extends JFrame {
 		// 적군을 덧 붙여줌
 		enemy = new Enemy(mContext);
 		add(enemy);
-//		new BGM();  
+		new BGM();  
 	}
 
 	private void initSetting() {

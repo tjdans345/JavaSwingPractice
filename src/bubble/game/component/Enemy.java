@@ -1,9 +1,12 @@
-package bubble.test.ex18;
+package bubble.game.component;
 
 import javax.swing.ImageIcon;
-
 import javax.swing.JLabel;
 
+import bubble.game.BubblerFrame;
+import bubble.game.Moveable;
+import bubble.game.service.BackgroundEnemyService;
+import bubble.game.state.EnemyDirection;
 import lombok.Getter;
 import lombok.Setter;
 

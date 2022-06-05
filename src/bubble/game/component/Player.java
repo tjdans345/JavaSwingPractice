@@ -1,9 +1,15 @@
-package bubble.test.ex18;
+package bubble.game.component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
-
 import javax.swing.JLabel;
 
+import bubble.game.BubblerFrame;
+import bubble.game.Moveable;
+import bubble.game.service.BackgroundPlayerService;
+import bubble.game.state.PlayerDirection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +17,10 @@ import lombok.Setter;
 //class Player -> new 가능한 애들!! 게임에 존재할 수 있음. (추상 메서드를 가질 수 없다.)
 @Getter
 @Setter
-public class Enemy extends JLabel implements Moveable {
+public class Player extends JLabel implements Moveable {
 
 	private BubblerFrame mContext;
+	private List<Bubble> bubbleList;
 	
 	// 위치 상태 값
 	private int x;
@@ -25,61 +32,79 @@ public class Enemy extends JLabel implements Moveable {
 	private boolean up;
 	private boolean down;
 	
-	private int state; // 0(살아 있는 상태), 1(물방울에 갇힌 상태
+	// 플레이어의 방향
+	private PlayerDirection playerDirection;
 	
-	// 적군의 방향
-	private EnemyDirection enemyDirection;
+	// 벽에 충돌한 상태
+	private boolean leftWallCrash;
+	private boolean rightWallCrash;
 	
-	// 적군의 속도 상태
-	private final int SPEED = 3;
-	private final int JUMPSPEED = 1; 
+	// 플레이어 속도 상태
+	private final int SPEED = 5;
+	private final int JUMPSPEED = 3;
 
-	private ImageIcon enemyR, enemyL;
+	private ImageIcon playerR, playerL;
 
-	public Enemy(BubblerFrame mContext) {
+	public Player(BubblerFrame mContext) {
 		this.mContext = mContext;
 		initObject();
 		initSetting();
-		initBackgroundEnemyService();
-		right();
+		initBackgroundPlayService();
 	}
 
 	private void initObject() {
-		enemyR = new ImageIcon("images/enemyR.png");
-		enemyL = new ImageIcon("images/enemyL.png");
+		playerR = new ImageIcon("images/playerR.png");
+		playerL = new ImageIcon("images/playerL.png");
+		bubbleList = new ArrayList<>();
 	}
 
 	private void initSetting() {
-		x = 480;
-		y = 178;
+		x = 80;
+		y = 540;
 
 		left = false;
 		right = false;
-		up = false; 
+		up = false;
 		down = false;
+		leftWallCrash = false;
+		rightWallCrash = false;
 		
-		enemyDirection = EnemyDirection.RIGHT;
+		playerDirection = PlayerDirection.RIGHT;
 
-		setIcon(enemyR);
+		setIcon(playerR);
 		setSize(50, 50);
 		setLocation(x, y);
 	}
 	
-	private void initBackgroundEnemyService() {
-		new Thread(new BackgroundEnemyService(this)).start();
+	private void initBackgroundPlayService() {
+		new Thread(new BackgroundPlayerService(this)).start();
 	}
 	
+	@Override
+	public void attack() {
+		new Thread(() -> {
+			Bubble bubble = new Bubble(mContext);
+			mContext.add(bubble);
+			bubbleList.add(bubble);
+			if(playerDirection == PlayerDirection.LEFT) {
+				bubble.left();
+			} else {
+				bubble.right();
+			}
+		}).start();
+	} 
+
 
 	// 이벤트 핸들러
 	@Override
 	public void left() {
-		enemyDirection = EnemyDirection.LEFT;
+		playerDirection = PlayerDirection.LEFT;
 		left = true;
 		
 		// 2가지 일을 동시에 하려고 하면 무조건 쓰레드를 사용해야한다.
 		new Thread(() -> {
 			while (left) {
-				setIcon(enemyL);
+				setIcon(playerL);
 				x = x - SPEED;
 				setLocation(x, y);
 				try {
@@ -94,13 +119,13 @@ public class Enemy extends JLabel implements Moveable {
 
 	@Override
 	public void right() {
-		enemyDirection = EnemyDirection.RIGHT;
+		playerDirection = PlayerDirection.RIGHT;
 		right = true;
 		
 		// 2가지 일을 동시에 하려고 하면 무조건 쓰레드를 사용해야한다.
 		new Thread(() -> {
 			while(right) {
-				setIcon(enemyR);
+				setIcon(playerR);
 				x = x + SPEED;
 				setLocation(x, y);
 				try {
