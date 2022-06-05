@@ -1,4 +1,4 @@
-package bubble.test.ex13;
+package bubble.test.ex15;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -39,7 +39,6 @@ public class Bubble extends JLabel implements Moveable {
 		this.player = mContext.getPlayer();
 		initObject();
 		initSetting();
-		initThread();
 	}
 
 	private void initObject() {
@@ -71,13 +70,10 @@ public class Bubble extends JLabel implements Moveable {
 		for (int i = 0; i < 400; i++) {
 			x--;
 			setLocation(x, y);
-			
 			if(backgroundBubbleService.leftWallCheck()) {
 				left = false;
-				
 				break;
 			}
-
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -97,7 +93,6 @@ public class Bubble extends JLabel implements Moveable {
 				right = false;
 				break;
 			}
-			
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -119,6 +114,7 @@ public class Bubble extends JLabel implements Moveable {
 			if(backgroundBubbleService.topWallCheck ()) {
 				break;
 			}
+			
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -139,18 +135,8 @@ public class Bubble extends JLabel implements Moveable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
-	private void initThread() {
-		// 버블은 쓰레드가 하나만 필요하다.
-		new Thread(() -> {
-			if (player.getPlayerDirection() == PlayerDirection.LEFT) {
-				left();setIcon(bomb);
-			} else {
-				right();
-			}
-		}).start();
-	}
+
 
 }

@@ -1,4 +1,4 @@
-package bubble.test.ex13;
+package bubble.test.ex14;
 
 import java.awt.Container;
 import java.awt.event.KeyAdapter;
@@ -35,7 +35,7 @@ public class BubblerFrame extends JFrame {
 		backgroundMap = new JLabel(new ImageIcon("images/backgroundMap.png"));
 		setContentPane(backgroundMap);
 
-		player = new Player();
+		player = new Player(mContext);
 		// 플레이어를 덧 붙여줌
 		add(player);
 
@@ -94,8 +94,9 @@ public class BubblerFrame extends JFrame {
 					break;
 
 				case KeyEvent.VK_SPACE:
-					Bubble bubble = new Bubble(mContext);
-					add(bubble);
+//					Bubble bubble = new Bubble(mContext);
+//					add(bubble);
+					player.attck();
 					break;
 				}
 			}

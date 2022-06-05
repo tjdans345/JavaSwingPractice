@@ -1,4 +1,4 @@
-package bubble.test.ex13;
+package bubble.test.ex17;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,6 +12,7 @@ public class Bubble extends JLabel implements Moveable {
 
 	// 의존성 콤포지션
 	private Player player;
+	private Enemy enemy;
 	private BackgroundBubbleService backgroundBubbleService;
 	private BubblerFrame mContext;
 
@@ -37,9 +38,9 @@ public class Bubble extends JLabel implements Moveable {
 	public Bubble(BubblerFrame mContext) {
 		this.mContext = mContext;
 		this.player = mContext.getPlayer();
+		this.enemy = mContext.getEnemy();
 		initObject();
 		initSetting();
-		initThread();
 	}
 
 	private void initObject() {
@@ -68,22 +69,30 @@ public class Bubble extends JLabel implements Moveable {
 	@Override
 	public void left() {
 		left = true;
+		
 		for (int i = 0; i < 400; i++) {
 			x--;
 			setLocation(x, y);
-			
 			if(backgroundBubbleService.leftWallCheck()) {
 				left = false;
-				
 				break;
 			}
-
+			
+			if((Math.abs(x - enemy.getX()) < 10 ) && 
+					(Math.abs(y - enemy.getY()) > 0 && Math.abs(y - enemy.getY()) < 50)	 ) {
+				if(enemy.getState() == 0 ) {
+					System.out.println("물방울이 적군과 충돌 하였습니다.");
+					attack();
+					break;
+				}
+			}
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		
 		up();
 	}
 
@@ -96,6 +105,16 @@ public class Bubble extends JLabel implements Moveable {
 			if(backgroundBubbleService.rightWallCheck()) {
 				right = false;
 				break;
+			}
+			
+			// 아군과 적군으 거리가 10의 차이가 나면
+			if((Math.abs(x - enemy.getX()) < 10 ) && 
+					(Math.abs(y - enemy.getY()) > 0 && Math.abs(y - enemy.getY()) < 50)	 ) {
+				if(enemy.getState() == 0 ) {
+					System.out.println("물방울이 적군과 충돌 하였습니다.");
+					attack();
+					break;
+				}
 			}
 			
 			try {
@@ -119,15 +138,35 @@ public class Bubble extends JLabel implements Moveable {
 			if(backgroundBubbleService.topWallCheck ()) {
 				break;
 			}
+			
 			try {
-				Thread.sleep(1);
+				if(state == 0) { // 기본 물방울
+					Thread.sleep(1);
+				} else { // 적을 가둔 물방울
+					Thread.sleep(10);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		clearBubble(); // 천장에 버블이 도착하고나서 3초 후에 메모리에서 소멸 
+		if(state == 0) {
+			clearBubble(); // 천장에 버블이 도착하고나서 3초 후에 메모리에서 소멸 
+		}
+		
 
+}
+	
+	@Override
+	public void attack() {
+		state = 1; 
+		enemy.setState(1);
+		
+		setIcon(bubbled);
+		mContext.remove(enemy);
+		mContext.repaint();
 	}
+	
+
 	
 	private void clearBubble() {
 		try {
@@ -141,16 +180,25 @@ public class Bubble extends JLabel implements Moveable {
 		}
 		
 	}
-
-	private void initThread() {
-		// 버블은 쓰레드가 하나만 필요하다.
+	
+	public void clearBubbled() {
 		new Thread(() -> {
-			if (player.getPlayerDirection() == PlayerDirection.LEFT) {
-				left();setIcon(bomb);
-			} else {
-				right();
+			System.out.println("clearBubbled");
+			try {
+				up = false;
+				setIcon(bomb);
+				Thread.sleep(1000);
+				mContext.remove(this);
+				mContext.repaint();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}).start();
+		
 	}
+	
+
+
 
 }

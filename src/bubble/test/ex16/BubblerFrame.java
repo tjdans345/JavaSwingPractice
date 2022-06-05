@@ -1,4 +1,4 @@
-package bubble.test.ex13;
+package bubble.test.ex16;
 
 import java.awt.Container;
 import java.awt.event.KeyAdapter;
@@ -23,6 +23,7 @@ public class BubblerFrame extends JFrame {
 	private BubblerFrame mContext = this;
 	private JLabel backgroundMap;
 	private Player player;
+	private Enemy enemy;
 
 	public BubblerFrame() {
 		initObject();
@@ -35,14 +36,12 @@ public class BubblerFrame extends JFrame {
 		backgroundMap = new JLabel(new ImageIcon("images/backgroundMap.png"));
 		setContentPane(backgroundMap);
 
-		player = new Player();
+		player = new Player(mContext);
 		// 플레이어를 덧 붙여줌
 		add(player);
-
-//		backgroundMap.setSize(100, 100);
-//		backgroundMap.setLocation(300, 300);
-//		backgroundMap.setSize(1000, 600);
-//		add(backgroundMap); // JFrame에 JLabel이 그려진다. add는 그림을 그려주는 메서드
+		// 적군을 덧 붙여줌
+		enemy = new Enemy(mContext);
+		add(enemy);
 	}
 
 	private void initSetting() {
@@ -94,8 +93,9 @@ public class BubblerFrame extends JFrame {
 					break;
 
 				case KeyEvent.VK_SPACE:
-					Bubble bubble = new Bubble(mContext);
-					add(bubble);
+//					Bubble bubble = new Bubble(mContext);
+//					add(bubble);
+					player.attack();
 					break;
 				}
 			}
